@@ -109,13 +109,15 @@
             // ScanBtn
             // 
             this.ScanBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ScanBtn.BackColor = System.Drawing.Color.Black;
+            this.ScanBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.ScanBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ScanBtn.Location = new System.Drawing.Point(697, 720);
             this.ScanBtn.Name = "ScanBtn";
             this.ScanBtn.Size = new System.Drawing.Size(75, 33);
             this.ScanBtn.TabIndex = 7;
             this.ScanBtn.Text = "Scan";
-            this.ScanBtn.UseVisualStyleBackColor = true;
+            this.ScanBtn.UseVisualStyleBackColor = false;
             this.ScanBtn.Click += new System.EventHandler(this.ScanBtn_Click);
             // 
             // EpisodeFlow
@@ -124,6 +126,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.EpisodeFlow.AutoScroll = true;
+            this.EpisodeFlow.BackColor = System.Drawing.Color.Black;
             this.EpisodeFlow.Location = new System.Drawing.Point(12, 67);
             this.EpisodeFlow.Name = "EpisodeFlow";
             this.EpisodeFlow.Size = new System.Drawing.Size(760, 647);
@@ -133,6 +136,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(784, 761);
             this.Controls.Add(this.EpisodeFlow);
             this.Controls.Add(this.ScanBtn);
@@ -142,6 +146,7 @@
             this.Controls.Add(this.SeasonBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.SeriesBox);
+            this.ForeColor = System.Drawing.Color.White;
             this.MinimumSize = new System.Drawing.Size(800, 800);
             this.Name = "Form1";
             this.Text = "Watched Media Tracker";
