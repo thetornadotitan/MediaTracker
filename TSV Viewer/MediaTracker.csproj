@@ -50,7 +50,7 @@
     <StartupObject>MediaTracker.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>eye_icon_xKG_icon.ico</ApplicationIcon>
+    <ApplicationIcon>eye_icon_white_outline_umw_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LumenWorks.Framework.IO, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5ad3ea2f85776344, processorArchitecture=MSIL">
@@ -116,6 +116,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>db.mdf</DependentUpon>
     </Content>
+    <Content Include="eye_icon_color_Os1_icon.ico" />
+    <Content Include="eye_icon_white_outline_umw_icon.ico" />
     <Content Include="eye_icon_xKG_icon.ico" />
     <Content Include="eye_xjB_icon.ico" />
     <Content Include="resources\Not Watched.png">
