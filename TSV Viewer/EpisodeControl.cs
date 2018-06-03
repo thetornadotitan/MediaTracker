@@ -60,7 +60,7 @@ namespace MediaTracker
             l1.BackColor = Color.Transparent;
             l1.Click += (o, i) =>
             {
-                watched = !watched;
+                watched = !ConnectionHelper.ShowWatched(show, season, episodeName);
                 ConnectionHelper.SetWatched(show, season, episodeName, watched);
                 l1.BackgroundImage = Image.FromFile(Path.Combine(Directory.GetCurrentDirectory(), "resources", (watched) ? "Watched.png" : "Not Watched.png"));
                 Refresh();
@@ -78,8 +78,7 @@ namespace MediaTracker
             play.Click += (o, i) =>
             {
                 ConnectionHelper.SetWatched(show, season, episodeName, true);
-                l1.Text = "O";
-                l1.ForeColor = Color.Green;
+                l1.BackgroundImage = Image.FromFile(Path.Combine(Directory.GetCurrentDirectory(), "resources", (ConnectionHelper.ShowWatched(show, season, episodeName) ? "Watched.png" : "Not Watched.png")));
                 Refresh();
                 System.Diagnostics.Process.Start(file);
             };

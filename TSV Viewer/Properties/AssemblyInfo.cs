@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TSV Viewer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Media Tracker")]
+[assembly: AssemblyDescription("Track Locally Viewed Media")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TSV Viewer")]
+[assembly: AssemblyProduct("Media Tracker")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
