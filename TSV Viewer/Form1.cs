@@ -50,7 +50,7 @@ namespace MediaTracker
                 string[] directories = Directory.GetDirectories(fileLocation);
                 foreach (string d in directories)
                 {
-                    SeasonBox.Items.Add(d);
+                    SeasonBox.Items.Add(d); 
                 }
             }
         }
