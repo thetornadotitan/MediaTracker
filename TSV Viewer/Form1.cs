@@ -10,19 +10,20 @@ namespace MediaTracker
 
         public Form1()
         {
+            
             InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            fbd.ShowDialog();
-            FileLocation.Text = fbd.SelectedPath;
-            ScanBtn_Click(null, null);
+            
         }
 
         private void ScanBtn_Click(object sender, EventArgs e)
         {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.ShowDialog();
+            FileLocation.Text = fbd.SelectedPath;
             SeasonBox.Items.Clear();
             SeasonBox.ResetText();
             SeriesBox.Items.Clear();

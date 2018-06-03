@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.SeriesBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -104,7 +105,6 @@
             this.FileLocation.Name = "FileLocation";
             this.FileLocation.Size = new System.Drawing.Size(556, 26);
             this.FileLocation.TabIndex = 6;
-            this.FileLocation.Text = "E:\\Shows";
             // 
             // ScanBtn
             // 
@@ -147,6 +147,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.SeriesBox);
             this.ForeColor = System.Drawing.Color.White;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(800, 800);
             this.Name = "Form1";
             this.Text = "Watched Media Tracker";
