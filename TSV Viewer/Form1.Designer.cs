@@ -150,6 +150,7 @@
             this.MinimumSize = new System.Drawing.Size(800, 800);
             this.Name = "Form1";
             this.Text = "Watched Media Tracker";
+            this.TransparencyKey = System.Drawing.Color.Magenta;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
