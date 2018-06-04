@@ -137,7 +137,7 @@
             // 
             // ToggleWatchedSeason
             // 
-            this.ToggleWatchedSeason.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ToggleWatchedSeason.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ToggleWatchedSeason.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.ToggleWatchedSeason.Enabled = false;
             this.ToggleWatchedSeason.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -164,7 +164,7 @@
             // 
             // ToggleWatchedShow
             // 
-            this.ToggleWatchedShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ToggleWatchedShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ToggleWatchedShow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.ToggleWatchedShow.Enabled = false;
             this.ToggleWatchedShow.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
