@@ -37,6 +37,9 @@
             this.FileLocation = new System.Windows.Forms.TextBox();
             this.ScanBtn = new System.Windows.Forms.Button();
             this.EpisodeFlow = new System.Windows.Forms.FlowLayoutPanel();
+            this.ToggleWatchedSeason = new System.Windows.Forms.Button();
+            this.ToggleWatchedLabel = new System.Windows.Forms.Label();
+            this.ToggleWatchedShow = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // SeriesBox
@@ -90,7 +93,7 @@
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 726);
+            this.label3.Location = new System.Drawing.Point(305, 726);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(110, 20);
             this.label3.TabIndex = 5;
@@ -101,9 +104,9 @@
             this.FileLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FileLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FileLocation.Location = new System.Drawing.Point(135, 723);
+            this.FileLocation.Location = new System.Drawing.Point(421, 723);
             this.FileLocation.Name = "FileLocation";
-            this.FileLocation.Size = new System.Drawing.Size(556, 26);
+            this.FileLocation.Size = new System.Drawing.Size(270, 26);
             this.FileLocation.TabIndex = 6;
             // 
             // ScanBtn
@@ -132,12 +135,57 @@
             this.EpisodeFlow.Size = new System.Drawing.Size(760, 647);
             this.EpisodeFlow.TabIndex = 8;
             // 
+            // ToggleWatchedSeason
+            // 
+            this.ToggleWatchedSeason.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ToggleWatchedSeason.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.ToggleWatchedSeason.Enabled = false;
+            this.ToggleWatchedSeason.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.ToggleWatchedSeason.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ToggleWatchedSeason.Location = new System.Drawing.Point(143, 720);
+            this.ToggleWatchedSeason.Name = "ToggleWatchedSeason";
+            this.ToggleWatchedSeason.Size = new System.Drawing.Size(75, 33);
+            this.ToggleWatchedSeason.TabIndex = 10;
+            this.ToggleWatchedSeason.Text = "Season";
+            this.ToggleWatchedSeason.UseVisualStyleBackColor = false;
+            this.ToggleWatchedSeason.Click += new System.EventHandler(this.ToggleWatchedSeason_Click);
+            // 
+            // ToggleWatchedLabel
+            // 
+            this.ToggleWatchedLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ToggleWatchedLabel.AutoSize = true;
+            this.ToggleWatchedLabel.Enabled = false;
+            this.ToggleWatchedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ToggleWatchedLabel.Location = new System.Drawing.Point(12, 726);
+            this.ToggleWatchedLabel.Name = "ToggleWatchedLabel";
+            this.ToggleWatchedLabel.Size = new System.Drawing.Size(125, 20);
+            this.ToggleWatchedLabel.TabIndex = 11;
+            this.ToggleWatchedLabel.Text = "Toggle Watched";
+            // 
+            // ToggleWatchedShow
+            // 
+            this.ToggleWatchedShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ToggleWatchedShow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.ToggleWatchedShow.Enabled = false;
+            this.ToggleWatchedShow.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.ToggleWatchedShow.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ToggleWatchedShow.Location = new System.Drawing.Point(224, 720);
+            this.ToggleWatchedShow.Name = "ToggleWatchedShow";
+            this.ToggleWatchedShow.Size = new System.Drawing.Size(75, 33);
+            this.ToggleWatchedShow.TabIndex = 12;
+            this.ToggleWatchedShow.Text = "Show";
+            this.ToggleWatchedShow.UseVisualStyleBackColor = false;
+            this.ToggleWatchedShow.Click += new System.EventHandler(this.ToggleWatchedShow_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(784, 761);
+            this.Controls.Add(this.ToggleWatchedShow);
+            this.Controls.Add(this.ToggleWatchedLabel);
+            this.Controls.Add(this.ToggleWatchedSeason);
             this.Controls.Add(this.EpisodeFlow);
             this.Controls.Add(this.ScanBtn);
             this.Controls.Add(this.FileLocation);
@@ -168,6 +216,9 @@
         private System.Windows.Forms.TextBox FileLocation;
         private System.Windows.Forms.Button ScanBtn;
         private System.Windows.Forms.FlowLayoutPanel EpisodeFlow;
+        private System.Windows.Forms.Button ToggleWatchedSeason;
+        private System.Windows.Forms.Label ToggleWatchedLabel;
+        private System.Windows.Forms.Button ToggleWatchedShow;
     }
 }
 

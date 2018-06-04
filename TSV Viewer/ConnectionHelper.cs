@@ -85,7 +85,7 @@ namespace MediaTracker
             return result;
         }
 
-        public static void AddShow(string show, string season, string name, string pic)
+        public static void AddShow(string show, string season, string name)
         {
             query = "INSERT INTO [dbo].[media] ([Show Name], [Season], [File Name], [Watched], [Pic]) VALUES (@showName, @season, @fileName, @watched, @pic)";
             cmd = new SqlCommand(query, conn);
@@ -93,6 +93,19 @@ namespace MediaTracker
             cmd.Parameters.AddWithValue("@season", season);
             cmd.Parameters.AddWithValue("@fileName", name);
             cmd.Parameters.AddWithValue("@watched", false);
+            cmd.Parameters.AddWithValue("@pic", "");
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+
+        public static void SetPicPath(string show, string season, string name, string pic)
+        {
+            query = "UPDATE [dbo].[media] SET [Pic] = @pic WHERE [Show Name] = @showName AND [Season] = @season AND [File Name] = @fileName";
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@showName", show);
+            cmd.Parameters.AddWithValue("@season", season);
+            cmd.Parameters.AddWithValue("@fileName", name);
             cmd.Parameters.AddWithValue("@pic", pic);
             conn.Open();
             cmd.ExecuteNonQuery();
@@ -106,6 +119,29 @@ namespace MediaTracker
             cmd.Parameters.AddWithValue("@showName", show);
             cmd.Parameters.AddWithValue("@season", season);
             cmd.Parameters.AddWithValue("@fileName", name);
+            cmd.Parameters.AddWithValue("@watched", watched);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+
+        public static void SetSeasonWatched(string show, string season, bool watched)
+        {
+            query = "UPDATE [dbo].[media] SET [Watched] = @watched WHERE [Show Name] = @showName AND [Season] = @season";
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@showName", show);
+            cmd.Parameters.AddWithValue("@season", season);
+            cmd.Parameters.AddWithValue("@watched", watched);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+
+        public static void SetShowWatched(string show, bool watched)
+        {
+            query = "UPDATE [dbo].[media] SET [Watched] = @watched WHERE [Show Name] = @showName";
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@showName", show);
             cmd.Parameters.AddWithValue("@watched", watched);
             conn.Open();
             cmd.ExecuteNonQuery();
