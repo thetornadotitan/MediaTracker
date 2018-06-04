@@ -28,14 +28,27 @@ namespace MediaTracker
             SeasonBox.ResetText();
             SeriesBox.Items.Clear();
             SeriesBox.ResetText();
+            ToggleWatchedSeason.Enabled = false;
+            ToggleWatchedShow.Enabled = false;
+            ToggleWatchedLabel.Enabled = false;
             EpisodeFlow.Controls.Clear();
             fileLocation = FileLocation.Text;
             if (Directory.Exists(fileLocation))
             {
-                string[] directories = Directory.GetDirectories(fileLocation);
-                foreach(string d in directories)
+                string[] shows = Directory.GetDirectories(fileLocation);
+                foreach(string show in shows)
                 {
-                    SeriesBox.Items.Add(d);
+                    string[] seasons = Directory.GetDirectories(show);
+                    foreach (string season in seasons)
+                    {
+                        string[] files = Directory.GetFiles(season);
+                        foreach (string file in files)
+                        {
+                            string[] showInfo = ShowHelper.GetShowInfo(file);
+                            ConnectionHelper.AddShow(showInfo[0], showInfo[1], showInfo[2]);
+                        }
+                    }
+                    SeriesBox.Items.Add(show);
                 }
             }
         }
@@ -44,6 +57,9 @@ namespace MediaTracker
         {
             SeasonBox.Items.Clear();
             SeasonBox.ResetText();
+            ToggleWatchedSeason.Enabled = false;
+            ToggleWatchedShow.Enabled = false;
+            ToggleWatchedLabel.Enabled = false;
             EpisodeFlow.Controls.Clear();
             fileLocation = SeriesBox.SelectedItem.ToString();
             if (Directory.Exists(fileLocation))
@@ -60,7 +76,9 @@ namespace MediaTracker
         {
             EpisodeFlow.Controls.Clear();
             fileLocation = SeasonBox.SelectedItem.ToString();
-            Console.WriteLine(fileLocation);
+            ToggleWatchedSeason.Enabled = true;
+            ToggleWatchedShow.Enabled = true;
+            ToggleWatchedLabel.Enabled = true;
             if (Directory.Exists(fileLocation))
             {
                 string[] files = Directory.GetFiles(fileLocation);
@@ -70,6 +88,48 @@ namespace MediaTracker
                 }
             }
             EpisodeFlow.Refresh();
+        }
+
+        private void ToggleWatchedSeason_Click(object sender, EventArgs e)
+        {
+            fileLocation = SeasonBox.SelectedItem.ToString();
+            if (Directory.Exists(fileLocation))
+            {
+                string[] files = Directory.GetFiles(fileLocation);
+                if (files.Length >= 1)
+                {
+                    string file = files[0];
+                    string[] showInfo = ShowHelper.GetShowInfo(file);
+                    bool watched = !ConnectionHelper.ShowWatched(showInfo[0], showInfo[1], showInfo[2]);
+                    ConnectionHelper.SetSeasonWatched(showInfo[0], showInfo[1], watched);
+                    foreach(EpisodeControl ec in EpisodeFlow.Controls)
+                    {
+                        ec.SetWatchedIcon(watched);
+                    }
+                    EpisodeFlow.Refresh();
+                }
+            }
+        }
+
+        private void ToggleWatchedShow_Click(object sender, EventArgs e)
+        {
+            fileLocation = SeasonBox.SelectedItem.ToString();
+            if (Directory.Exists(fileLocation))
+            {
+                string[] files = Directory.GetFiles(fileLocation);
+                if (files.Length >= 1)
+                {
+                    string file = files[0];
+                    string[] showInfo = ShowHelper.GetShowInfo(file);
+                    bool watched = !ConnectionHelper.ShowWatched(showInfo[0], showInfo[1], showInfo[2]);
+                    ConnectionHelper.SetShowWatched(showInfo[0], watched);
+                    foreach (EpisodeControl ec in EpisodeFlow.Controls)
+                    {
+                        ec.SetWatchedIcon(watched);
+                    }
+                    EpisodeFlow.Refresh();
+                }
+            }
         }
     }
 }

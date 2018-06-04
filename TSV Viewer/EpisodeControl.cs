@@ -8,64 +8,49 @@ namespace MediaTracker
 {
     class EpisodeControl : Panel
     {
+        private PictureBox watchedPic;
+        string[] showInfo;
+
         public EpisodeControl(string file)
         {
-            string[] splitPath = file.Split('\\');
-            string show = splitPath[2];
-            string season = splitPath[3];
-            string episodeName = splitPath[4];
+            showInfo = ShowHelper.GetShowInfo(file);
             bool watched = false;
 
             BackColor = Color.DarkGray;
             BackgroundImageLayout = ImageLayout.Stretch;
 
-            if (ConnectionHelper.ShowExists(show, season, episodeName))
+            if (ConnectionHelper.ShowExists(showInfo[0], showInfo[1], showInfo[2]))
             {
-                watched = ConnectionHelper.ShowWatched(show, season, episodeName);
-                try
-                {
-                    BackgroundImage = Image.FromFile(ConnectionHelper.GetPic(show, season, episodeName));
-                }
-                catch { }
-            }
-            else
-            {
-                if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "resources", "Thumbnails"))){
-                    Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "resources", "Thumbnails"));
-                }
-                string path = Path.Combine(Directory.GetCurrentDirectory(), "resources", "Thumbnails", episodeName + ".jpg");
-                FFMpegConverter ffMpeg = new FFMpegConverter();
-                Stream f = new MemoryStream();
+                watched = ConnectionHelper.ShowWatched(showInfo[0], showInfo[1], showInfo[2]);
+                string img = ConnectionHelper.GetPic(showInfo[0], showInfo[1], showInfo[2]);
 
-                try
+                if(img == string.Empty)
                 {
-                    ffMpeg.GetVideoThumbnail(file, f, 60);
-                    Image i = Image.FromStream(f);
-                    BackgroundImage = i;
-                    i.Save(path, ImageFormat.Jpeg);
+                    BackgroundImage = Image.FromFile(CreateThumbnail(file));
                 }
-                catch { }
-
-                ConnectionHelper.AddShow(show, season, episodeName, path);
+                else
+                {
+                    BackgroundImage = Image.FromFile(img);
+                }
             }
 
             Size = new Size(200, 200);
 
-            PictureBox l1 = new PictureBox();
-            l1.Left = 4;
-            l1.Top = 4;
-            l1.Size = new Size(25, 25);
-            l1.BackgroundImage = Image.FromFile(Path.Combine(Directory.GetCurrentDirectory(), "resources", (watched) ? "Watched.png" : "Not Watched.png"));
-            l1.BackgroundImageLayout = ImageLayout.Stretch;
-            l1.BackColor = Color.Transparent;
-            l1.Click += (o, i) =>
+            watchedPic = new PictureBox();
+            watchedPic.Left = 4;
+            watchedPic.Top = 4;
+            watchedPic.Size = new Size(25, 25);
+            watchedPic.BackgroundImage = Image.FromFile(Path.Combine(Directory.GetCurrentDirectory(), "resources", (watched) ? "Watched.png" : "Not Watched.png"));
+            watchedPic.BackgroundImageLayout = ImageLayout.Stretch;
+            watchedPic.BackColor = Color.Transparent;
+            watchedPic.Click += (o, i) =>
             {
-                watched = !ConnectionHelper.ShowWatched(show, season, episodeName);
-                ConnectionHelper.SetWatched(show, season, episodeName, watched);
-                l1.BackgroundImage = Image.FromFile(Path.Combine(Directory.GetCurrentDirectory(), "resources", (watched) ? "Watched.png" : "Not Watched.png"));
+                watched = !ConnectionHelper.ShowWatched(showInfo[0], showInfo[1], showInfo[2]);
+                ConnectionHelper.SetWatched(showInfo[0], showInfo[1], showInfo[2], watched);
+                SetWatchedIcon(watched);
                 Refresh();
             };
-            Controls.Add(l1);
+            Controls.Add(watchedPic);
 
             PictureBox play = new PictureBox();
             play.Text = "Play";
@@ -77,8 +62,8 @@ namespace MediaTracker
             play.BackColor = Color.Transparent;
             play.Click += (o, i) =>
             {
-                ConnectionHelper.SetWatched(show, season, episodeName, true);
-                l1.BackgroundImage = Image.FromFile(Path.Combine(Directory.GetCurrentDirectory(), "resources", (ConnectionHelper.ShowWatched(show, season, episodeName) ? "Watched.png" : "Not Watched.png")));
+                ConnectionHelper.SetWatched(showInfo[0], showInfo[1], showInfo[2], true);
+                watchedPic.BackgroundImage = Image.FromFile(Path.Combine(Directory.GetCurrentDirectory(), "resources", (ConnectionHelper.ShowWatched(showInfo[0], showInfo[1], showInfo[2]) ? "Watched.png" : "Not Watched.png")));
                 Refresh();
                 System.Diagnostics.Process.Start(file);
             };
@@ -97,6 +82,34 @@ namespace MediaTracker
             Controls.Add(l4);
             
             MouseEnter += (o, i) => { l4.Visible = true; };
+        }
+
+        private string CreateThumbnail(string file)
+        {
+            if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "resources", "Thumbnails")))
+            {
+                Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "resources", "Thumbnails"));
+            }
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "resources", "Thumbnails", showInfo[2] + ".jpg");
+            ConnectionHelper.SetPicPath(showInfo[0], showInfo[1], showInfo[2], path);
+            FFMpegConverter ffMpeg = new FFMpegConverter();
+            Stream f = new MemoryStream();
+
+            try
+            {
+                ffMpeg.GetVideoThumbnail(file, f, 60);
+                Image i = Image.FromStream(f);
+                BackgroundImage = i;
+                i.Save(path, ImageFormat.Jpeg);
+            }
+            catch { }
+
+            return path;
+        }
+
+        public void SetWatchedIcon(bool watched)
+        {
+            watchedPic.BackgroundImage = Image.FromFile(Path.Combine(Directory.GetCurrentDirectory(), "resources", (watched) ? "Watched.png" : "Not Watched.png"));
         }
     }
 }
