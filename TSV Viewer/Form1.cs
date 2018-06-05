@@ -44,8 +44,11 @@ namespace MediaTracker
                         string[] files = Directory.GetFiles(season);
                         foreach (string file in files)
                         {
-                            string[] showInfo = ShowHelper.GetShowInfo(file);
-                            ConnectionHelper.AddShow(showInfo[0], showInfo[1], showInfo[2]);
+                            if (ShowHelper.IsShow(file))
+                            {
+                                string[] showInfo = ShowHelper.GetShowInfo(file);
+                                ConnectionHelper.AddShow(showInfo[0], showInfo[1], showInfo[2]);
+                            }
                         }
                     }
                     SeriesBox.Items.Add(show);
@@ -84,7 +87,10 @@ namespace MediaTracker
                 string[] files = Directory.GetFiles(fileLocation);
                 foreach (string f in files)
                 {
-                    EpisodeFlow.Controls.Add(new EpisodeControl(f));
+                    if (ShowHelper.IsShow(f))
+                    {
+                        EpisodeFlow.Controls.Add(new EpisodeControl(f));
+                    }
                 }
             }
             EpisodeFlow.Refresh();
