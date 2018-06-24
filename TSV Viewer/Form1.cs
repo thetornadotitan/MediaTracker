@@ -1,141 +1,152 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.IO;
+using System.Security.AccessControl;
 
 namespace MediaTracker
 {
     public partial class Form1 : Form
     {
-        private string fileLocation = "";
+        string workingDirectory;
 
         public Form1()
         {
-            
             InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\resources\\Thumbnails"))
+                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\resources\\Thumbnails");
+
+            DisplayRootDirectory(null, null);
+            workingDirectory = "";
         }
 
-        private void ScanBtn_Click(object sender, EventArgs e)
+        private void DisplayRootDirectory(object sender, EventArgs e)
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            fbd.ShowDialog();
-            FileLocation.Text = fbd.SelectedPath;
-            SeasonBox.Items.Clear();
-            SeasonBox.ResetText();
-            SeriesBox.Items.Clear();
-            SeriesBox.ResetText();
-            ToggleWatchedSeason.Enabled = false;
-            ToggleWatchedShow.Enabled = false;
-            ToggleWatchedLabel.Enabled = false;
             EpisodeFlow.Controls.Clear();
-            fileLocation = FileLocation.Text;
-            if (Directory.Exists(fileLocation))
+            foreach (string s in Directory.GetLogicalDrives())
             {
-                string[] shows = Directory.GetDirectories(fileLocation);
-                foreach(string show in shows)
+                EpisodeFlow.Controls.Add(new DirectoryControl(s, this));
+            }
+        }
+
+        public void DirectoryDoubleClick(object sender, EventArgs e)
+        {
+            DirectoryControl c = sender as DirectoryControl;
+            UpdateFlowControl(c.path);
+            workingDirectory = c.path;
+        }
+
+        private void UpdateFlowControl(string path)
+        {
+            EpisodeFlow.Controls.Clear();
+            CreateRegressControls(path);
+
+            string[] directories;
+
+            try
+            {
+                directories = Directory.GetDirectories(path);
+            }
+            catch
+            {
+                DisplayRootDirectory(null, null);
+                return;
+            }
+
+            foreach(string d in directories)
+            {
+                if (Directory.Exists(d))
                 {
-                    string[] seasons = Directory.GetDirectories(show);
-                    foreach (string season in seasons)
+                    EpisodeFlow.Controls.Add(new DirectoryControl(d, this));
+                }
+            }
+
+            string[] files = Directory.GetFiles(path);
+
+            foreach(string f in files)
+            {
+                if (ShowHelper.IsShow(f) && File.Exists(f))
+                {
+                    EpisodeFlow.Controls.Add(new EpisodeControl(f));
+                }
+            }
+
+        }
+
+        private void CreateRegressControls(string path)
+        {
+            string parent = "";
+
+            if (Directory.GetParent(path) != null)
+                parent = Directory.GetParent(path).ToString();
+
+            if (parent != String.Empty)
+            {
+                //Create .. directory
+                EpisodeFlow.Controls.Add(new DirectoryControl(parent, this, true));
+            }
+            else
+            {
+                DirectoryControl c = new DirectoryControl("", this, true);
+                c.DoubleClick += DisplayRootDirectory;
+                EpisodeFlow.Controls.Add(c);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string[] files = Directory.GetFiles(workingDirectory);
+
+            foreach (string f in files)
+            {
+                if (ShowHelper.IsShow(f) && File.Exists(f))
+                {
+                    ConnectionHelper.SetWatched(f, true);
+                    foreach (Panel ep in EpisodeFlow.Controls)
                     {
-                        string[] files = Directory.GetFiles(season);
-                        foreach (string file in files)
+                        try
                         {
-                            if (ShowHelper.IsShow(file))
-                            {
-                                string[] showInfo = ShowHelper.GetShowInfo(file);
-                                ConnectionHelper.AddShow(showInfo[0], showInfo[1], showInfo[2]);
-                            }
+                            EpisodeControl epc = ep as EpisodeControl;
+                            epc.RefreshEpisodeStatus(f, true);
                         }
-                    }
-                    SeriesBox.Items.Add(show);
-                }
-            }
-        }
-
-        private void SeriesBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SeasonBox.Items.Clear();
-            SeasonBox.ResetText();
-            ToggleWatchedSeason.Enabled = false;
-            ToggleWatchedShow.Enabled = false;
-            ToggleWatchedLabel.Enabled = false;
-            EpisodeFlow.Controls.Clear();
-            fileLocation = SeriesBox.SelectedItem.ToString();
-            if (Directory.Exists(fileLocation))
-            {
-                string[] directories = Directory.GetDirectories(fileLocation);
-                foreach (string d in directories)
-                {
-                    SeasonBox.Items.Add(d); 
-                }
-            }
-        }
-
-        private void SeasonBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            EpisodeFlow.Controls.Clear();
-            fileLocation = SeasonBox.SelectedItem.ToString();
-            ToggleWatchedSeason.Enabled = true;
-            ToggleWatchedShow.Enabled = true;
-            ToggleWatchedLabel.Enabled = true;
-            if (Directory.Exists(fileLocation))
-            {
-                string[] files = Directory.GetFiles(fileLocation);
-                foreach (string f in files)
-                {
-                    if (ShowHelper.IsShow(f))
-                    {
-                        EpisodeFlow.Controls.Add(new EpisodeControl(f));
+                        catch
+                        {
+                            continue;
+                        }
                     }
                 }
             }
             EpisodeFlow.Refresh();
         }
 
-        private void ToggleWatchedSeason_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-            fileLocation = SeasonBox.SelectedItem.ToString();
-            if (Directory.Exists(fileLocation))
-            {
-                string[] files = Directory.GetFiles(fileLocation);
-                if (files.Length >= 1)
-                {
-                    string file = files[0];
-                    string[] showInfo = ShowHelper.GetShowInfo(file);
-                    bool watched = !ConnectionHelper.ShowWatched(showInfo[0], showInfo[1], showInfo[2]);
-                    ConnectionHelper.SetSeasonWatched(showInfo[0], showInfo[1], watched);
-                    foreach(EpisodeControl ec in EpisodeFlow.Controls)
-                    {
-                        ec.SetWatchedIcon(watched);
-                    }
-                    EpisodeFlow.Refresh();
-                }
-            }
-        }
+            string[] files = Directory.GetFiles(workingDirectory);
 
-        private void ToggleWatchedShow_Click(object sender, EventArgs e)
-        {
-            fileLocation = SeasonBox.SelectedItem.ToString();
-            if (Directory.Exists(fileLocation))
+            foreach (string f in files)
             {
-                string[] files = Directory.GetFiles(fileLocation);
-                if (files.Length >= 1)
+                if (ShowHelper.IsShow(f) && File.Exists(f))
                 {
-                    string file = files[0];
-                    string[] showInfo = ShowHelper.GetShowInfo(file);
-                    bool watched = !ConnectionHelper.ShowWatched(showInfo[0], showInfo[1], showInfo[2]);
-                    ConnectionHelper.SetShowWatched(showInfo[0], watched);
-                    foreach (EpisodeControl ec in EpisodeFlow.Controls)
+                    ConnectionHelper.SetWatched(f, false);
+                    foreach (Panel ep in EpisodeFlow.Controls)
                     {
-                        ec.SetWatchedIcon(watched);
+                        try
+                        {
+                            EpisodeControl epc = ep as EpisodeControl;
+                            epc.RefreshEpisodeStatus(f, false);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
                     }
-                    EpisodeFlow.Refresh();
+
                 }
             }
+            EpisodeFlow.Refresh();
         }
     }
 }

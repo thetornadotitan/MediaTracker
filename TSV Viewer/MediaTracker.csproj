@@ -73,6 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionHelper.cs" />
+    <Compile Include="DirectoryControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="EpisodeControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -121,6 +124,15 @@
     <Content Include="eye_icon_white_outline_umw_icon.ico" />
     <Content Include="eye_icon_xKG_icon.ico" />
     <Content Include="eye_xjB_icon.ico" />
+    <Content Include="resources\BackFolder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\DefaultFile.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Folder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Not Watched.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
