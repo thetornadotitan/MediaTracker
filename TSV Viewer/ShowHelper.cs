@@ -19,13 +19,6 @@ namespace MediaTracker
             ".f4a", ".f4b"
         };
 
-        public static string[] GetShowInfo(string file)
-        {
-            string[] splitPath = file.Split('\\');
-            string[] result = { splitPath[2], splitPath[3], splitPath[4] };
-            return result;
-        }
-
         public static bool IsShow(string file)
         {
             if (File.Exists(file))

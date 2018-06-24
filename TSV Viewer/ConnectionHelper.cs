@@ -13,13 +13,64 @@ namespace MediaTracker
         private static class Columns
         {
             public static int ID = 0;
-            public static int ShowName = 1;
-            public static int Season = 2;
-            public static int FileName = 3;
-            public static int Watched = 4;
-            public static int pic = 5;
+            public static int FilePath = 1;
+            public static int Watched = 2;
         }
 
+        public static bool ShowDoesExists(string file)
+        {
+            bool exists = false;
+
+            query = "SELECT * FROM [dbo].[media] WHERE [FilePath] = @filePath";
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@filePath", file);
+            conn.Open();
+            rdr = cmd.ExecuteReader();
+            exists = rdr.HasRows;
+            conn.Close();
+
+            return exists;
+        }
+
+        public static bool ShowIsWatched(string file)
+        {
+            bool result = false;
+
+            query = "SELECT * FROM [dbo].[media] WHERE [FilePath] = @filePath";
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@filePath", file);
+            conn.Open();
+            rdr = cmd.ExecuteReader();
+            rdr.Read();
+            result = rdr.GetBoolean(Columns.Watched);
+            conn.Close();
+
+            return result;
+        }
+
+        public static void SetWatched(string file, bool watched)
+        {
+            query = "UPDATE [dbo].[media] SET [Watched] = @watched WHERE [FilePath] = @filePath";
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@filePath", file);
+            cmd.Parameters.AddWithValue("@watched", watched);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+
+        public static void AddShow(string file)
+        {
+            query = "INSERT INTO [dbo].[media] ([FilePath], [Watched]) VALUES (@filePath, @watched)";
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@filePath", file);
+            cmd.Parameters.AddWithValue("@watched", false);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+
+        /*
         public static bool ShowExists(string show, string season, string name)
         {
             bool result = false;
@@ -147,6 +198,6 @@ namespace MediaTracker
             cmd.ExecuteNonQuery();
             conn.Close();
         }
-
+        */
     }
 }
