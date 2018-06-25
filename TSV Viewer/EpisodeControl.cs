@@ -24,7 +24,7 @@ namespace MediaTracker
 
         public void RefreshEpisodeStatus(string file)
         {
-            bool watched = ConnectionHelper.ShowIsWatched(file);
+            bool watched = XMLHelper.ShowIsWatched(filePathName);
             watchedStatusIcon.BackgroundImage = (watched) ? Image.FromFile(Directory.GetCurrentDirectory() + "\\resources\\Watched.png") : Image.FromFile(Directory.GetCurrentDirectory() + "\\resources\\Not Watched.png");
         }
 
@@ -41,7 +41,6 @@ namespace MediaTracker
             {
                 try
                 {
-                    Console.WriteLine(filePathName);
                     new FFMpegConverter().GetVideoThumbnail(file, Directory.GetCurrentDirectory() + "\\resources\\Thumbnails\\" + filePathName + ".jpeg", 60);
                 }catch
                 {
@@ -60,12 +59,12 @@ namespace MediaTracker
 
             BackgroundImageLayout = ImageLayout.Stretch;
 
-            if (!ConnectionHelper.ShowDoesExists(file))
-                ConnectionHelper.AddShow(file);
+            if (!XMLHelper.ShowDoesExists(filePathName))
+                XMLHelper.AddShow(filePathName);
 
             watchedStatusIcon = new PictureBox
             {
-                BackgroundImage = (ConnectionHelper.ShowIsWatched(file)) ? Image.FromFile(Directory.GetCurrentDirectory() + "\\resources\\Watched.png") : Image.FromFile(Directory.GetCurrentDirectory() + "\\resources\\Not Watched.png"),
+                BackgroundImage = (XMLHelper.ShowIsWatched(filePathName)) ? Image.FromFile(Directory.GetCurrentDirectory() + "\\resources\\Watched.png") : Image.FromFile(Directory.GetCurrentDirectory() + "\\resources\\Not Watched.png"),
                 BackgroundImageLayout = ImageLayout.Stretch,
                 BackColor = Color.Transparent,
                 Size = new Size(30, 20),
@@ -73,9 +72,9 @@ namespace MediaTracker
                 Left = 30,
             };
             watchedStatusIcon.Click += (o, s) => {
-                bool watched = ConnectionHelper.ShowIsWatched(file);
+                bool watched = XMLHelper.ShowIsWatched(filePathName);
                 watched = !watched;
-                ConnectionHelper.SetWatched(file, watched);
+                XMLHelper.SetWatched(filePathName, watched);
                 watchedStatusIcon.BackgroundImage = (watched) ? Image.FromFile(Directory.GetCurrentDirectory() + "\\resources\\Watched.png") : Image.FromFile(Directory.GetCurrentDirectory() + "\\resources\\Not Watched.png");
             };
             Controls.Add(watchedStatusIcon);
@@ -110,7 +109,7 @@ namespace MediaTracker
 
             DoubleClick += (o, s) => {
                 watchedStatusIcon.BackgroundImage = Image.FromFile(Directory.GetCurrentDirectory() + "\\resources\\Watched.png");
-                ConnectionHelper.SetWatched(file, true);
+                XMLHelper.SetWatched(filePathName, true);
                 System.Diagnostics.Process.Start(file);
             };
 
