@@ -104,13 +104,16 @@ namespace MediaTracker
             {
                 if (ShowHelper.IsShow(f) && File.Exists(f))
                 {
-                    ConnectionHelper.SetWatched(f, true);
+                    string filePathName = f.Replace('\\', '_');
+                    filePathName = filePathName.Replace(':', '_');
+                    filePathName = filePathName.Remove(0, 3);
+                    XMLHelper.SetWatched(filePathName, true);
                     foreach (Panel ep in EpisodeFlow.Controls)
                     {
                         try
                         {
                             EpisodeControl epc = ep as EpisodeControl;
-                            epc.RefreshEpisodeStatus(f, true);
+                            epc.RefreshEpisodeStatus(filePathName, true);
                         }
                         catch
                         {
@@ -130,13 +133,16 @@ namespace MediaTracker
             {
                 if (ShowHelper.IsShow(f) && File.Exists(f))
                 {
-                    ConnectionHelper.SetWatched(f, false);
+                    string filePathName = f.Replace('\\', '_');
+                    filePathName = filePathName.Replace(':', '_');
+                    filePathName = filePathName.Remove(0, 3);
+                    XMLHelper.SetWatched(filePathName, false);
                     foreach (Panel ep in EpisodeFlow.Controls)
                     {
                         try
                         {
                             EpisodeControl epc = ep as EpisodeControl;
-                            epc.RefreshEpisodeStatus(f, false);
+                            epc.RefreshEpisodeStatus(filePathName, false);
                         }
                         catch
                         {
